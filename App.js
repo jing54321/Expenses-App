@@ -1,21 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './Screens/HomeScreen';
 import RecentExpensesScreen from './Screens/RecentExpensesScreen';
-import IconButton from './Components/IconButton';
+import AddExpenseScreen from './Screens/AddExpenseScreen';
+import EditExpenseScreen from './Screens/EditExpenseScreen';
+import AddButton from './Components/Buttons/AddButton';
 import Colors from './Constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import AddExpenseScreen from './Screens/AddExpenseScreen';
 import { Provider } from 'react-redux';
-import { store } from './Store';
+import { store } from './store';
+
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const App = () => {
-  const Stack = createNativeStackNavigator();
-  const Tab = createBottomTabNavigator();
-
   const BottomNavigator = () => {
     return (
       <Tab.Navigator
@@ -26,15 +27,16 @@ const App = () => {
           tabBarStyle: { backgroundColor: Colors.secondary, paddingTop: 8 },
           tabBarLabelStyle: { fontSize: 12 },
           tabBarActiveTintColor: '#cccccc',
-          headerRight: () => <IconButton icon={'add'} color={'#000'} />,
+          headerRight: () => <AddButton icon={'add'} color={'#000'} />,
         }}
       >
         <Tab.Screen
           name="RecentExpenses"
           component={RecentExpensesScreen}
           options={{
-            title: 'Recent Expenses',
-            tabBarIcon: ({ color, size }) => <Ionicons name="timer" color={color} size={size} />,
+            title: 'Recent Expense',
+            tabBarLabel: 'Recent',
+            tabBarIcon: ({ color, size }) => <Ionicons name="hourglass" color={color} size={size} />,
           }}
         />
         <Tab.Screen
@@ -42,7 +44,8 @@ const App = () => {
           component={HomeScreen}
           options={{
             title: 'All Expenses',
-            tabBarIcon: ({ color, size }) => <Ionicons name="wallet" color={color} size={size} />,
+            tabBarLabel: 'All',
+            tabBarIcon: ({ color, size }) => <Ionicons name="calendar" color={color} size={size} />,
           }}
         />
       </Tab.Navigator>
@@ -51,7 +54,13 @@ const App = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: Colors.primary },
+            headerTitleAlign: 'center',
+            headerTintColor: '#fff',
+          }}
+        >
           <Stack.Group>
             <Stack.Screen
               name="BottomNavigator"
@@ -62,13 +71,8 @@ const App = () => {
             />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: 'modal' }}>
-            <Stack.Screen
-              name="AddExpense"
-              component={AddExpenseScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
+            <Stack.Screen name="AddExpense" component={AddExpenseScreen} options={{ title: 'Add Expense' }} />
+            <Stack.Screen name="EditExpense" component={EditExpenseScreen} options={{ title: 'Edit Expense' }} />
           </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>

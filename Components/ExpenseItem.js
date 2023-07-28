@@ -1,16 +1,30 @@
 import React from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const ExpenseItem = ({ item }) => {
+  const getFloatFixed = (value, fixed) => {
+    return parseFloat(Math.round(value * 100) / 100).toFixed(fixed);
+  };
+  const temp = getFloatFixed(item.amount, 2);
+  const amount = temp.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const navigation = useNavigation();
+  const { description } = item;
   return (
     <View>
-      <Pressable style={({ pressed }) => (pressed ? [styles.pressed, styles.itemContainer] : styles.itemContainer)} android_ripple={{ color: '#fff' }}>
+      <Pressable
+        style={({ pressed }) => (pressed ? [styles.pressed, styles.itemContainer] : styles.itemContainer)}
+        android_ripple={{ color: '#fff' }}
+        onPress={() => {
+          navigation.navigate('EditExpense', { item: item });
+        }}
+      >
         <View style={styles.textContainer}>
-          <Text style={styles.text}>{item.name.charAt(0).toUpperCase() + item.name.slice(1)}</Text>
+          <Text style={styles.text}>{description.toUpperCase()}</Text>
           <Text style={styles.text}>{item.date}</Text>
         </View>
         <View style={styles.amountContainer}>
-          <Text>{item.amount}</Text>
+          <Text style={{ textAlign: 'right', width: '100%' }}>{amount}</Text>
         </View>
       </Pressable>
     </View>
@@ -31,6 +45,10 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     overflow: 'hidden',
     gap: 10,
+    shadowColor: '#ccc',
+    shadowOffset: { width: 1, height: 1 },
+    shadowRadius: 4,
+    shadowOpacity: 0.4,
   },
   textContainer: {
     flex: 1,
@@ -38,11 +56,12 @@ const styles = StyleSheet.create({
   },
   amountContainer: {
     backgroundColor: '#fff',
-    width: 80,
+    width: 110,
     height: 50,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 16,
   },
   text: {
     color: '#fff',

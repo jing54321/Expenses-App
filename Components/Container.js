@@ -7,7 +7,9 @@ const Container = ({ children }) => {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    padding: 24,
+    paddingTop: 24,
+    paddingBottom: 0,
+    paddingHorizontal: 24,
   },
 });
 export default Container;

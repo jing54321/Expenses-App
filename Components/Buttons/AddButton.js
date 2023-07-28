@@ -2,15 +2,11 @@ import React from 'react';
 import { StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-const IconButton = ({ icon, color }) => {
+
+const AddButton = ({ icon, color, onPress }) => {
   const navigation = useNavigation();
   return (
-    <Pressable
-      onPress={() => {
-        navigation.navigate('AddExpense');
-      }}
-      style={({ pressed }) => (pressed ? [styles.button, styles.pressed] : styles.button)}
-    >
+    <Pressable onPress={onPress ? onPress : () => navigation.navigate('AddExpense')} style={({ pressed }) => (pressed ? [styles.button, styles.pressed] : styles.button)}>
       <Ionicons name={icon} size={32} color={color} />
     </Pressable>
   );
@@ -18,10 +14,10 @@ const IconButton = ({ icon, color }) => {
 
 const styles = StyleSheet.create({
   button: {
-    marginRight: 16,
+    alignItems: 'center',
   },
   pressed: {
     opacity: 0.5,
   },
 });
-export default IconButton;
+export default AddButton;
