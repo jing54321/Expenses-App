@@ -9,11 +9,9 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontSize: 24,
-    backgroundColor: Colors.primary,
-    marginBottom: 24,
-    color: '#fff',
+    margin: 24,
+    color: '#000',
     fontWeight: 'bold',
-    padding: 36,
   },
 });
 export default FormTitle;

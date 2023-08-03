@@ -1,13 +1,16 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './Screens/HomeScreen';
 import RecentExpensesScreen from './Screens/RecentExpensesScreen';
 import AddExpenseScreen from './Screens/AddExpenseScreen';
 import EditExpenseScreen from './Screens/EditExpenseScreen';
-import AddButton from './Components/Buttons/AddButton';
+import ProfileScreen from './Screens/ProfileScreen';
+import IconButton from './Components/Buttons/IconButton';
 import Colors from './Constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { Provider } from 'react-redux';
@@ -15,6 +18,7 @@ import { store } from './store';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 const App = () => {
   const BottomNavigator = () => {
@@ -27,7 +31,7 @@ const App = () => {
           tabBarStyle: { backgroundColor: Colors.secondary, paddingTop: 8 },
           tabBarLabelStyle: { fontSize: 12 },
           tabBarActiveTintColor: '#cccccc',
-          headerRight: () => <AddButton icon={'add'} color={'#000'} />,
+          headerShown: false,
         }}
       >
         <Tab.Screen
@@ -38,6 +42,13 @@ const App = () => {
             tabBarLabel: 'Recent',
             tabBarIcon: ({ color, size }) => <Ionicons name="hourglass" color={color} size={size} />,
           }}
+          listeners={{
+            tabPress: ({ navigation, route }) => {
+              // navigation.setParams({
+              //   title: 'Recent Expense',
+              // });
+            },
+          }}
         />
         <Tab.Screen
           name="HomeScreen"
@@ -47,8 +58,58 @@ const App = () => {
             tabBarLabel: 'All',
             tabBarIcon: ({ color, size }) => <Ionicons name="calendar" color={color} size={size} />,
           }}
+          listeners={{
+            tabPress: ({ navigation, route }) => {},
+          }}
         />
       </Tab.Navigator>
+    );
+  };
+  const DrawerNavigator = () => {
+    return (
+      <Drawer.Navigator
+        initialRouteName="BottomNavigator"
+        screenOptions={({ navigation, route }) => ({
+          headerStyle: { backgroundColor: Colors.primary },
+          headerTintColor: '#ffffff',
+          headerTitleAlign: 'center',
+          drawerActiveBackgroundColor: '#f0e1ff',
+          drawerActiveTintColor: '#3c0a6b',
+          drawerStyle: {
+            backgroundColor: '#fff',
+          },
+
+          headerRight: ({ tintColor }) => (
+            <IconButton
+              icon={'add'}
+              color={tintColor}
+              size={32}
+              onPress={() => {
+                navigation.navigate('AddExpense');
+              }}
+            />
+          ),
+        })}
+      >
+        <Drawer.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            drawerLabel: 'Edit Profile',
+            title: 'Edit Profile',
+            drawerIcon: ({ color, size }) => <Ionicons name="person" color={color} size={size} />,
+          }}
+        />
+        <Drawer.Screen
+          name="BottomNavigator"
+          component={BottomNavigator}
+          options={({ route }) => ({
+            drawerLabel: 'Home',
+            title: 'Expense',
+            drawerIcon: ({ color, size }) => <Ionicons name="home" color={color} size={size} />,
+          })}
+        />
+      </Drawer.Navigator>
     );
   };
   return (
@@ -63,8 +124,8 @@ const App = () => {
         >
           <Stack.Group>
             <Stack.Screen
-              name="BottomNavigator"
-              component={BottomNavigator}
+              name="DrawerNavigator"
+              component={DrawerNavigator}
               options={{
                 headerShown: false,
               }}
