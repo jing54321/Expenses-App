@@ -11,6 +11,7 @@ import IconButton from '../Components/Buttons/IconButton';
 import PrimaryButton from '../Components/Buttons/PrimaryButton';
 import SecondaryButton from '../Components/Buttons/SecondaryButton';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Input from '../Components/Form/Input';
 
 const EditExpenseScreen = ({ navigation, route }) => {
   const { item } = route.params;
@@ -46,16 +47,30 @@ const EditExpenseScreen = ({ navigation, route }) => {
     <FormContainer>
       <Spinner visible={loading} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} />
       <FormGroup>
-        <Label>Description</Label>
-        <TextInput style={styles.input} onChangeText={changeDescHandler} value={description} />
+        <Input
+          label={'Description'}
+          textInputConfig={{
+            onChangeText: changeDescHandler,
+            value: description,
+            keyboardType: 'text',
+            autoCapitalize: 'words',
+            multiline: true,
+            numberOfLines: 2,
+          }}
+        />
       </FormGroup>
       <FormGroup>
-        <Label>Amount</Label>
-        <TextInput style={styles.input} onChangeText={changeAmountHandler} value={amount} keyboardType="decimal-pad" />
+        <Input
+          label={'Amount'}
+          textInputConfig={{
+            onChangeText: changeAmountHandler,
+            value: amount,
+            keyboardType: 'decimal-pad',
+          }}
+        />
       </FormGroup>
       <FormGroup>
-        <Label>Date</Label>
-        <Date setDate={setDate} date={date} />
+        <Date setDate={setDate} date={date} label={'Date'} />
       </FormGroup>
       <FormGroup>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

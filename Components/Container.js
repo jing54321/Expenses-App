@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 const Container = ({ children }) => {
   return <View style={styles.rootContainer}>{children}</View>;

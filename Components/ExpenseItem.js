@@ -16,11 +16,11 @@ const ExpenseItem = ({ item }) => {
         style={({ pressed }) => (pressed ? [styles.pressed, styles.itemContainer] : styles.itemContainer)}
         android_ripple={{ color: '#fff' }}
         onPress={() => {
-          navigation.navigate('EditExpense', { item: item });
+          navigation.navigate('ManageExpense', { item: item });
         }}
       >
         <View style={styles.textContainer}>
-          <Text style={styles.text}>{description.toUpperCase()}</Text>
+          <Text style={styles.text}>{description}</Text>
           <Text style={styles.text}>{item.date}</Text>
         </View>
         <View style={styles.amountContainer}>

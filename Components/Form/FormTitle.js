@@ -9,9 +9,11 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontSize: 24,
-    margin: 24,
+    marginTop: 36,
+    marginBottom: 42,
     color: '#000',
     fontWeight: 'bold',
+    textDecorationLine: 'underline',
   },
 });
 export default FormTitle;

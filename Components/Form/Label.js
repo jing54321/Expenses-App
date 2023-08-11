@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333333',
     fontWeight: 'bold',
+    paddingBottom: 4,
   },
 });
 export default Label;

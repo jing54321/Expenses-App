@@ -7,7 +7,6 @@ const FormGroup = ({ children }) => {
 const styles = StyleSheet.create({
   itemContainer: {
     gap: 8,
-    marginBottom: 16,
     paddingHorizontal: 24,
   },
 });

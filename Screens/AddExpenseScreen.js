@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { addExpense, resetExpense } from '../Reducers/expense';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../Components/Form/FormContainer';
@@ -10,6 +10,8 @@ import PrimaryButton from '../Components/Buttons/PrimaryButton';
 import SecondaryButton from '../Components/Buttons/SecondaryButton';
 import moment from 'moment/moment';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Input from '../Components/Form/Input';
+import FormTitle from '../Components/Form/FormTitle';
 
 const AddExpenseScreen = ({ navigation }) => {
   const [description, setDescription] = useState(' ');
@@ -38,18 +40,39 @@ const AddExpenseScreen = ({ navigation }) => {
 
   return (
     <FormContainer>
+      <FormTitle>Your Expense</FormTitle>
       <Spinner visible={loading} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} />
       <FormGroup>
-        <Label>Description</Label>
-        <TextInput style={styles.input} onChangeText={changeDescHandler} value={description} />
+        <View style={styles.AmountDateBox}>
+          <View style={{ flex: 0.5 }}>
+            <Input
+              label={'Amount'}
+              textInputConfig={{
+                onChangeText: changeAmountHandler,
+                value: amount,
+                keyboardType: 'decimal-pad',
+              }}
+            />
+          </View>
+          <View style={{ flex: 0.5 }}>
+            <Date setDate={setDate} date={date} label={'Date'} />
+          </View>
+        </View>
       </FormGroup>
+
       <FormGroup>
-        <Label>Amount</Label>
-        <TextInput style={styles.input} onChangeText={changeAmountHandler} value={amount} keyboardType="decimal-pad" />
-      </FormGroup>
-      <FormGroup>
-        <Label>Date</Label>
-        <Date setDate={setDate} date={date} />
+        <Input
+          label={'Description'}
+          textInputConfig={{
+            onChangeText: changeDescHandler,
+            value: description,
+            keyboardType: 'default',
+            autoCapitalize: 'words',
+            multiline: true,
+            numberOfLines: 2,
+            //autoCorrect: false, //default is true
+          }}
+        />
       </FormGroup>
       <FormGroup>
         <PrimaryButton onPress={submitHandler} title={'Submit'} />
@@ -71,6 +94,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: 'grey',
     fontSize: 16,
+  },
+  AmountDateBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 8,
   },
 });
 

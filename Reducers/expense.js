@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 //API
 function fetchItems() {
   return new Promise(function (resolve, reject) {
-    setTimeout(() => resolve('success'), 500);
+    setTimeout(() => resolve('success'), 1000);
   });
 }
 //Actions

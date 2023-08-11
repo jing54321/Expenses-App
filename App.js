@@ -1,14 +1,15 @@
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './Screens/HomeScreen';
 import RecentExpensesScreen from './Screens/RecentExpensesScreen';
-import AddExpenseScreen from './Screens/AddExpenseScreen';
-import EditExpenseScreen from './Screens/EditExpenseScreen';
+import ManageExpenseScreen from './Screens/ManageExpenseScreen';
+// import AddExpenseScreen from './Screens/AddExpenseScreen';
+// import EditExpenseScreen from './Screens/EditExpenseScreen';
 import ProfileScreen from './Screens/ProfileScreen';
 import IconButton from './Components/Buttons/IconButton';
 import Colors from './Constants/Colors';
@@ -38,7 +39,6 @@ const App = () => {
           name="RecentExpenses"
           component={RecentExpensesScreen}
           options={{
-            title: 'Recent Expense',
             tabBarLabel: 'Recent',
             tabBarIcon: ({ color, size }) => <Ionicons name="hourglass" color={color} size={size} />,
           }}
@@ -54,7 +54,6 @@ const App = () => {
           name="HomeScreen"
           component={HomeScreen}
           options={{
-            title: 'All Expenses',
             tabBarLabel: 'All',
             tabBarIcon: ({ color, size }) => <Ionicons name="calendar" color={color} size={size} />,
           }}
@@ -85,7 +84,7 @@ const App = () => {
               color={tintColor}
               size={32}
               onPress={() => {
-                navigation.navigate('AddExpense');
+                navigation.navigate('ManageExpense');
               }}
             />
           ),
@@ -104,8 +103,8 @@ const App = () => {
           name="BottomNavigator"
           component={BottomNavigator}
           options={({ route }) => ({
-            drawerLabel: 'Home',
             title: 'Expense',
+            drawerLabel: 'Home',
             drawerIcon: ({ color, size }) => <Ionicons name="home" color={color} size={size} />,
           })}
         />
@@ -132,8 +131,8 @@ const App = () => {
             />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: 'modal' }}>
-            <Stack.Screen name="AddExpense" component={AddExpenseScreen} options={{ title: 'Add Expense' }} />
-            <Stack.Screen name="EditExpense" component={EditExpenseScreen} options={{ title: 'Edit Expense' }} />
+            <Stack.Screen name="ManageExpense" component={ManageExpenseScreen} />
+            {/* <Stack.Screen name="EditExpense" component={EditExpenseScreen} options={{ title: 'Edit Expense' }} /> */}
           </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>
@@ -141,12 +140,3 @@ const App = () => {
   );
 };
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
