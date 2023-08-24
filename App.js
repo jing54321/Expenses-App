@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -20,6 +21,7 @@ import { store } from './store';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
+let title = 'All expenses';
 
 const App = () => {
   const BottomNavigator = () => {
@@ -42,13 +44,11 @@ const App = () => {
             tabBarLabel: 'Recent',
             tabBarIcon: ({ color, size }) => <Ionicons name="hourglass" color={color} size={size} />,
           }}
-          listeners={{
-            tabPress: ({ navigation, route }) => {
-              // navigation.setParams({
-              //   title: 'Recent Expense',
-              // });
+          listeners={({ navigation, route }) => ({
+            tabPress: e => {
+              title = 'Recent expenses';
             },
-          }}
+          })}
         />
         <Tab.Screen
           name="HomeScreen"
@@ -57,9 +57,11 @@ const App = () => {
             tabBarLabel: 'All',
             tabBarIcon: ({ color, size }) => <Ionicons name="calendar" color={color} size={size} />,
           }}
-          listeners={{
-            tabPress: ({ navigation, route }) => {},
-          }}
+          listeners={({ navigation, route }) => ({
+            tabPress: e => {
+              title = 'All Expenses';
+            },
+          })}
         />
       </Tab.Navigator>
     );
@@ -103,7 +105,7 @@ const App = () => {
           name="BottomNavigator"
           component={BottomNavigator}
           options={({ route }) => ({
-            title: 'Expense',
+            title: title,
             drawerLabel: 'Home',
             drawerIcon: ({ color, size }) => <Ionicons name="home" color={color} size={size} />,
           })}

@@ -13,3 +13,5 @@ This app is for managing user's spending history.
 - modal dateTime picker
 - spinner
 - expo
+- firebase database
+- .env

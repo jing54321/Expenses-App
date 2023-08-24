@@ -4,7 +4,6 @@ import { addExpense, resetExpense, updateExpense, removeExpense } from '../Reduc
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../Components/Form/FormContainer';
 import FormGroup from '../Components/Form/FormGroup';
-
 import Date from '../Components/Form/Date';
 import PrimaryButton from '../Components/Buttons/PrimaryButton';
 import SecondaryButton from '../Components/Buttons/SecondaryButton';
@@ -13,22 +12,24 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Input from '../Components/Form/Input';
 import FormTitle from '../Components/Form/FormTitle';
 import IconButton from '../Components/Buttons/IconButton';
-
+/**
+ * This component is to add a new expense item or update existing item's info.
+ */
 const ManageExpenseScreen = ({ navigation, route }) => {
   const item = route.params?.item;
   const isEditable = !!item;
   const [inputs, setInputs] = useState({
     description: {
-      value: '',
+      value: isEditable ? item.description : '',
       isValid: true,
     },
     amount: {
-      value: '',
+      value: isEditable ? item.amount : '',
       isValid: true,
     },
   });
-  const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
-  const { loading, success } = useSelector(state => state.expenseItems);
+  const [date, setDate] = useState(isEditable ? item.date : moment().format('YYYY-MM-DD'));
+  const { loading, success, error } = useSelector(state => state.expenseItems);
   const dispatch = useDispatch();
 
   const inputChangedHandler = (inputIdentifier, enteredValue) => {
@@ -68,12 +69,25 @@ const ManageExpenseScreen = ({ navigation, route }) => {
 
   const submitHandler = () => {
     if (!checkValid()) return;
-    dispatch(addExpense({ id: Math.random() * 17 + 11, description: inputs.description.value, amount: inputs.amount.value, date: date }));
+    dispatch(
+      addExpense({
+        description: inputs.description.value,
+        amount: inputs.amount.value,
+        date: date,
+      })
+    );
   };
 
   const updateHandler = () => {
     if (!checkValid()) return;
-    dispatch(updateExpense({ id: item.id, description: inputs.description.value, amount: inputs.amount.value, date: date }));
+    dispatch(
+      updateExpense({
+        id: item.id,
+        description: inputs.description.value,
+        amount: inputs.amount.value,
+        date: date,
+      })
+    );
   };
 
   const deleteHandler = () => {
@@ -84,19 +98,6 @@ const ManageExpenseScreen = ({ navigation, route }) => {
     navigation.setOptions({
       title: isEditable ? 'Edit Expense' : 'Add Expense',
     });
-    if (isEditable) {
-      setInputs({
-        description: {
-          value: item.description,
-          isValid: isEditable,
-        },
-        amount: {
-          value: item.amount,
-          isValid: isEditable,
-        },
-      });
-      setDate(item.date);
-    }
   }, [isEditable, navigation]);
 
   useEffect(() => {
@@ -109,17 +110,18 @@ const ManageExpenseScreen = ({ navigation, route }) => {
   return (
     <FormContainer>
       <FormTitle>Your Expense</FormTitle>
+      {error && Alert.alert('Connection Error', 'Could not connect to server', [{ text: 'OK', onPress: () => dispatch(resetExpense()) }])}
       <Spinner visible={loading} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} />
       <FormGroup>
         <View style={styles.AmountDateBox}>
           <View style={{ flex: 0.5 }}>
             <Input
               label={'Amount'}
+              isValid={inputs.amount.isValid}
               textInputConfig={{
                 onChangeText: inputChangedHandler.bind(this, 'amount'),
                 value: inputs.amount.value,
                 keyboardType: 'decimal-pad',
-                borderColor: inputs.amount.isValid ? 'grey' : 'red',
               }}
             />
             {!inputs.amount.isValid ? <Text style={{ color: 'red' }}>Invalid inputs</Text> : <Text></Text>}
@@ -137,6 +139,7 @@ const ManageExpenseScreen = ({ navigation, route }) => {
         <View>
           <Input
             label={'Description'}
+            isValid={inputs.description.isValid}
             textInputConfig={{
               onChangeText: inputChangedHandler.bind(this, 'description'),
               value: inputs.description.value,

@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: 'grey',
     fontSize: 16,
+    marginBottom: 12,
   },
   remove: {
     backgroundColor: '#ccc',

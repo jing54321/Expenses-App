@@ -1,15 +1,15 @@
 import React from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 import Label from './Label';
 
-const Input = ({ label, textInputConfig }) => {
+const Input = ({ label, isValid, textInputConfig }) => {
   let inputStyles = [styles.input];
 
   if (textInputConfig && textInputConfig.multiline) {
     inputStyles.push(styles.inputMultiline);
   }
 
-  styles.input.borderColor = textInputConfig.borderColor;
+  styles.input.borderColor = isValid ? 'grey' : 'red';
 
   return (
     <>
